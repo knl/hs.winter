@@ -27,3 +27,10 @@ The name winter is a portmanteu of **win**dow mas**ter**.
 and end with a command `move()`, `place()`, `resize()`, or `act()`
 (they are all synonyms for the same action). This chain of commands
 will return a function that one can easily pass to hotkey.bind.
+
+## Todo
+
+- improve screen handling
+- tests
+- do a proper documentation, as the one coming with mjolnir is painfull
+- ...
