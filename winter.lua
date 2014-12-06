@@ -52,8 +52,8 @@ local CoordTrans = {}
 
 function CoordTrans:set(win, screen, f)
   local screenrect = screen:frame()
-  print(string.format("set: screen x=%d, y=%d, w=%d, h=%d", screenrect.x, screenrect.y, screenrect.w, screenrect.h))
-  print(string.format("set: input f x=%d, y=%d, w=%d, h=%d", f.x, f.y, f.w, f.h))
+  -- print(string.format("set: screen x=%d, y=%d, w=%d, h=%d", screenrect.x, screenrect.y, screenrect.w, screenrect.h))
+  -- print(string.format("set: input f x=%d, y=%d, w=%d, h=%d", f.x, f.y, f.w, f.h))
   newf = {
     x = f.x + screenrect.x,
     y = f.y + screenrect.y,
@@ -68,8 +68,8 @@ function CoordTrans:get(win, _screen)
   local f = win:frame()
   local screen = _screen or win:screen()
   local screenrect = screen:frame()
-  print(string.format("get: screen x=%d, y=%d, w=%d, h=%d", screenrect.x, screenrect.y, screenrect.w, screenrect.h))
-  print(string.format("get: win f x=%d, y=%d, w=%d, h=%d", f.x, f.y, f.w, f.h))
+  -- print(string.format("get: screen x=%d, y=%d, w=%d, h=%d", screenrect.x, screenrect.y, screenrect.w, screenrect.h))
+  -- print(string.format("get: win f x=%d, y=%d, w=%d, h=%d", f.x, f.y, f.w, f.h))
   return {
     x = f.x - screenrect.x,
     y = f.y - screenrect.y,
