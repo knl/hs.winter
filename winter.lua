@@ -39,7 +39,7 @@
 
 -- main module class table
 local winter = {
-  _VERSION     = '0.1.0',
+  _VERSION     = '0.2.0',
   _DESCRIPTION = 'A module for moving/resizing windows using a fluent interface',
   _URL         = 'https://github.com/knl/mjolnir.winter',
 }
