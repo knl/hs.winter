@@ -413,18 +413,7 @@ function WinterAction:act()
       win = window.focusedwindow()
     end
 
-    local origf = self.ct:get(win)
-    -- print(string.format("origf x=%d, y=%d, w=%d, h=%d", origf.x, origf.y, origf.w, origf.h))
-    -- print(string.format("self x=%d, y=%d, w=%d, h=%d", self.x, self.y, self.w, self.h))
-    -- print(string.format("self dx=%d, dy=%d, dw=%d, dh=%d", self.dx, self.dy, self.dw, self.dh))
-
-    -- take defaults
-    f.w = (self.w == 0) and origf.w or self.w
-    f.h = (self.h == 0) and origf.h or self.h
-    f.x = (self.x == -1) and origf.x or self.x
-    f.y = (self.y == -1) and origf.y or self.y
-
-    -- now, place it on the right screen
+    -- first, determine the screen where the window should go
     local screen = win:screen()
     if self.mainscreen then
       screen = mscreen.mainscreen()
@@ -446,9 +435,17 @@ function WinterAction:act()
       else print("Direction " .. v .. " for screen is not recognized") end
     end
 
-    local srect = screen:frame()
-    origf.screenw = srect.w
-    origf.screenh = srect.h
+    -- now do the window placement
+    local origf = self.ct:get(win, screen)
+    -- print(string.format("origf x=%d, y=%d, w=%d, h=%d", origf.x, origf.y, origf.w, origf.h))
+    -- print(string.format("self x=%d, y=%d, w=%d, h=%d", self.x, self.y, self.w, self.h))
+    -- print(string.format("self dx=%d, dy=%d, dw=%d, dh=%d", self.dx, self.dy, self.dw, self.dh))
+
+    -- take defaults
+    f.w = (self.w == 0) and origf.w or self.w
+    f.h = (self.h == 0) and origf.h or self.h
+    f.x = (self.x == -1) and origf.x or self.x
+    f.y = (self.y == -1) and origf.y or self.y
 
     -- widest and tallest
 
