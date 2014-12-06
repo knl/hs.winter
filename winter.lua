@@ -122,6 +122,9 @@ local function init_winter_action(title)
     dy = 0,
     dw = 0,
     dh = 0,
+    -- centering
+    _vcenter = false,
+    _hcenter = false,
     -- screen
     mainscreen = false,
     dscreen = 0, -- for prev/next
@@ -400,6 +403,30 @@ function WinterAction:screen(direction)
   return self
 end
 
+--- mjolnir.winteraction:vcenter()
+--- Function
+--- Does a vertical centering of the window on the screen. This method
+--- might not do anything if it is not sensible for a given setting
+--- (for example, on a 2x2 grid, where window is 1 cell wide).
+function WinterAction:vcenter()
+  self._vcenter = true
+  self._dx = 0
+  self._x = -1
+  return self
+end
+
+--- mjolnir.winteraction:hcenter()
+--- Function
+--- Does a horizontal centering of the window on the screen. This method
+--- might not do anything if it is not sensible for a given setting
+--- (for example, on a 2x2 grid, where window is 1 cell high).
+function WinterAction:hcenter()
+  self._hcenter = true
+  self._dy = 0
+  self._y = -1
+  return self
+end
+
 --- mjolnir.winteraction:act()
 --- Function
 --- Finalizes all previous commands for changing windows' size and
@@ -466,6 +493,16 @@ function WinterAction:act()
     end
     if self.dh ~= 0 then
       f.h = math.min(origf.screenh, math.max(1, f.h + self.dh))
+    end
+
+    -- centering
+    if self._vcenter then
+       print("vcenter called with f.x = ".. f.x .. " origf.sw = " .. origf.screenw)
+       f.x = math.max(0, (origf.screenw - f.w)/2)
+    end
+
+    if self._hcenter then
+       f.y = math.max(0, (origf.screenh - f.h)/2)
     end
 
     -- and positions
