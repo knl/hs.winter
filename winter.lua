@@ -1,4 +1,4 @@
---- === mjolnir.winter ===
+--- === winter ===
 ---
 --- A module for moving/resizing windows using a fluent interface (see Usage below).
 ---
@@ -6,7 +6,7 @@
 ---
 --- Usage:
 ---
----     local wintermod = require "mjolnir.winter"
+---     local wintermod = require "winter"
 ---     local winter = wintermod.new()
 ---
 ---     local cmdalt  = {"cmd", "alt"}
@@ -34,13 +34,11 @@
 ---- will return a function that one can pass to hotkey.bind.
 ---
 ---
---- [Github Page](https://github.com/knl/mjolnir.winter)
----
 --- @author    Nikola Knezevic
---- @copyright 2014
+--- @copyright 2015
 --- @license   BSD
 ---
---- @module mjolnir.winter
+--- @module winter
 
 -- main module class table
 local winter = {
@@ -49,9 +47,9 @@ local winter = {
   _URL         = 'https://github.com/knl/mjolnir.winter',
 }
 
-local appfinder = require "mjolnir.cmsj.appfinder"
-local window = require "mjolnir.window"
-local mscreen = require "mjolnir.screen"
+local appfinder = require "hs.appfinder"
+local window = require "hs.window"
+local mscreen = require "hs.screen"
 
 -- class that deals with coordinate transformations
 local CoordTrans = {}
@@ -67,7 +65,7 @@ function CoordTrans:set(win, screen, f)
     h = f.h,
   }
   print(string.format("set: input f x=%d, y=%d, w=%d, h=%d", newf.x, newf.y, newf.w, newf.h))
-  win:setframe(newf)
+  win:setFrame(newf)
 end
 
 function CoordTrans:get(win, _screen)
@@ -153,6 +151,7 @@ end
 --- Function
 --- Creates a new WinterAction object for the main window of the app titled 'title'
 function Winter:window(title)
+   print(":window looking for " .. title)
   assert(title and title ~= '', 'Cannot find a window without a title')
   _self = init_winter_action(title)
   _self.ct = self.ct
@@ -357,6 +356,7 @@ function WinterAction:nextscreen()
   -- self._mainscreen = false
   self.screen_compass = {}
   self.dscreen = self.dscreen + 1
+  print("dscreen is " .. self.dscreen)
   return self
 end
 
@@ -368,6 +368,7 @@ function WinterAction:prevscreen()
   -- self._mainscreen = false
   self.screen_compass = {}
   self.dscreen = self.dscreen - 1
+  print("dscreen is " .. self.dscreen)
   return self
 end
 
@@ -437,24 +438,29 @@ function WinterAction:act()
   return function()
     local f = {}
     local win = nil
+    print("Now in act")
     if self.title and self.title ~= '' then
-      local app = appfinder.app_from_name(self.title)
+       print('looking for title ' .. self.title)
+      local app = appfinder.appFromName(self.title)
       if not app then
         error(string.format('Could not find application with title "%s"', self.title))
       end
-      win = app:mainwindow()
+      win = app:mainWindow()
       if not win then
         error(string.format('Application "%s" does not have a main window', self.title))
       end
       -- alert.show(string.format('application title for %q is %q, main window %q', title, app:title(), window:title()))
     else
-      win = window.focusedwindow()
+      win = window.focusedWindow()
     end
 
     -- first, determine the screen where the window should go
     local screen = win:screen()
+    print("Currently, I think I'm on " .. screen:name())
+    -- print("Should place the screen with main = " .. tostring(self._mainscreen))
+    -- print("Should place the screen with offs = " .. tostring(self.dscreen))
     if self._mainscreen then
-      screen = mscreen.mainscreen()
+      screen = mscreen.mainScreen()
     end
     local dscreen = self.dscreen
     while dscreen < 0 do
